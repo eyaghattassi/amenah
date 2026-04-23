@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Amenah — Éthique alternatives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Lora:ital,wght@0,500;0,600;1,400&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/style.css">
+<link rel="stylesheet" href="static/chatbot.css">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem("amenah-theme");
+    if (t !== "light" && t !== "dark") t = "dark";
+    document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
+})();
+</script>
+</head>
+
+<body>
+<div class="scene-root">
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="grid-floor" aria-hidden="true"></div>
+
+<header class="site-header">
+<nav class="nav-3d" aria-label="Navigation principale">
+  <a class="brand" href="#" onclick="showPage('home'); return false;">
+    <img class="brand-mark" src="static/logo.png" alt="" width="92" height="48" decoding="async">
+    <span class="brand-text">Amenah</span>
+  </a>
+  <div class="nav-links">
+    <button type="button" id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Thème clair ou sombre" aria-label="Changer le thème">
+      <span class="theme-toggle__sun" aria-hidden="true">☀️</span>
+      <span class="theme-toggle__moon" aria-hidden="true">🌙</span>
+    </button>
+    <button type="button" class="nav-btn" data-nav-page="home" onclick="showPage('home')">Accueil</button>
+    <button type="button" class="nav-btn" data-nav-page="boycott" onclick="showPage('boycott')">Boycott</button>
+    <button type="button" class="nav-btn" data-nav-page="alt" onclick="showPage('alt')">Alternatives</button>
+    <button type="button" class="nav-btn" data-nav-page="news" onclick="showPage('news')">News</button>
+    <button type="button" class="nav-btn" data-nav-page="donation" onclick="showPage('donation')">Donation</button>
+    <button type="button" class="nav-btn" data-nav-page="about" onclick="showPage('about')">À propos</button>
+    <button type="button" class="nav-btn nav-btn--accent" data-nav-page="add" onclick="showPage('add')">+ajouter un produit</button>
+  </div>
+</nav>
+
+  
+</header>
+
+
+<section id="home" class="page">
+<div class="hero-stage">
+  <div class="hero-card">
+    <p class="eyebrow">Transparence · Impact · Solidarité</p>
+    <h1 class="hero-title">Amenah</h1>
+    <p class="hero-tagline">Votre achat, leur voix.</p>
+    <div class="paragraph hero-copy">
+      <p>Quelque part entre votre portefeuille et le monde, une conversation a lieu.</p>
+      <p>Ce site vous aide à l'entendre : les histoires derrière les produits du quotidien, les voix étouffées, les choix qui vont plus loin qu'on ne le croit.</p>
+      <p>Face à chaque vérité difficile, nous proposons des alternatives fondées sur l'équité, la dignité et le soin.</p>
+      <div class="home-quote-block" role="region" aria-label="Citation">
+        <div class="home-quote-block__inner">
+          <span class="home-quote-mark" aria-hidden="true">“</span>
+          <blockquote class="home-quote">
+            <p class="home-quote__text" id="homeQuoteText">Boycott is not hate — it is love for justice.</p>
+            <footer class="home-quote__attr"><span id="homeQuoteAttr">— BDS Movement</span></footer>
+          </blockquote>
+        </div>
+        <div class="home-quote-rule" aria-hidden="true"></div>
+        <button type="button" class="home-quote-btn" id="homeQuoteBtn">
+          <svg class="home-quote-btn__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+          </svg>
+          New quote
+        </button>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button type="button" class="btn-3d btn-3d--primary" onclick="showPage('add')">Proposer un produit</button>
+      <button type="button" class="btn-3d btn-3d--ghost" onclick="showPage('boycott')">Explorer le boycott</button>
+    </div>
+  </div>
+  <div class="video-container video-3d">
+    <video autoplay muted loop playsinline poster="">
+        <source src="static/boyct.mp4" type="video/mp4">
+    </video>
+    <div class="video-frame" aria-hidden="true"></div>
+  </div>
+</div>
+</section>
+
+<button type="button" class="fab-qr-scan" onclick="openQrScannerModal()" title="Scanner QR / code-barres" aria-label="Scanner QR ou code-barres">
+  <svg class="fab-qr-scan__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+    <path d="M2 2h4v4H2V2zm1 1v2h2V3H3zm5-1h4v4H8V2zm1 1v2h2V3h-2zM2 8h4v4H2V8zm1 1v2h2V9H3zm8-1h1v1h-1V8zm0 2h1v1h-1v-1zm-2 2h1v1h-1v-1zm2 2h1v1h-1v-1zm-2-2h1v1h-1v-1zm-2-2h1v1H9v-1zm0 4h1v1H9v-1zm4-2h1v1h-1v-1zm0-4h1v1h-1V8zm0 6h1v1h-1v-1z"/>
+  </svg>
+</button>
+<button type="button" id="fabDonationSuggest" class="fab-donation-suggest hidden" onclick="openDonationSuggestModal()" title="Suggérer un organisme" aria-label="Suggérer un organisme ou une personne pour la page Donation">
+  <span class="fab-donation-suggest__icon" aria-hidden="true">+</span>
+</button>
+<button type="button" class="top-btn fab-feedback" onclick="openFeedbackModal()" title="Feedback">Feedback</button>
+<section id="add" class="page hidden">
+  <div class="panel-3d form-panel form-panel--add">
+    <div class="add-page__top">
+      <button type="button" class="btn-3d btn-3d--ghost add-page__back" onclick="goBackFromAdd()">← Retour</button>
+      <h2 class="section-title add-page__title">Suggérer un produit</h2>
+    </div>
+    <p class="section-lead">Votre idée est enregistrée dans la table <strong>waiting</strong>. Par défaut, Flask utilise le fichier SQLite <code>data/amenah.db</code> (pas MySQL/phpMyAdmin). Après validation, une entrée <strong>boycott</strong> rejoint la liste boycott ; une <strong>alternative</strong> rejoint la liste des alternatives éthiques.</p>
+    <form id="suggestionForm" class="suggestion-form" novalidate>
+      <fieldset class="field-row suggestion-type-fieldset">
+        <legend>Type de suggestion <span class="req">*</span></legend>
+        <div class="suggestion-type-options">
+          <label class="suggestion-type-option">
+            <input type="radio" name="suggestion_type" value="boycott" checked>
+            <span class="suggestion-type-option__main">Boycott</span>
+            <span class="suggestion-type-option__hint muted">Produit ou marque à éviter</span>
+          </label>
+          <label class="suggestion-type-option">
+            <input type="radio" name="suggestion_type" value="alternative">
+            <span class="suggestion-type-option__main">Alternative</span>
+            <span class="suggestion-type-option__hint muted">Piste éthique (alternatives)</span>
+          </label>
+        </div>
+      </fieldset>
+      <div class="field-row">
+        <label for="nom">Nom du produit <span class="req">*</span></label>
+        <input type="text" id="nom" name="nom" required maxlength="200" placeholder="Ex. Marque X" autocomplete="off">
+      </div>
+      <div class="field-row">
+        <label for="categorie">Catégorie</label>
+        <select id="categorie" name="categorie">
+          <option value="">— Choisir —</option>
+          <option value="food">Alimentation</option>
+          <option value="tech">Tech</option>
+          <option value="clothing">Mode</option>
+          <option value="finance">Finance</option>
+          <option value="media">Médias</option>
+          <option value="cleaning">Cosmétiques / soin</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label for="description">Pourquoi le signaler ? (contexte, sources)</label>
+        <textarea id="description" name="description" rows="4" maxlength="4000" placeholder="Informations factuelles, liens utiles…"></textarea>
+      </div>
+      <div class="field-row">
+        <label for="lien_source">Lien (article, rapport…)</label>
+        <input type="url" id="lien_source" name="lien_source" placeholder="https://…">
+      </div>
+      <div class="field-row">
+        <label for="email_contact">Votre e-mail (optionnel, pour recontact)</label>
+        <input type="email" id="email_contact" name="email_contact" placeholder="vous@exemple.com" autocomplete="email">
+      </div>
+      <p id="formMessage" class="form-message" role="status"></p>
+      <button type="submit" class="btn-3d btn-3d--primary btn-block">Envoyer la suggestion</button>
+    </form>
+    <p class="admin-hint">Équipe : <a href="/admin">valider les suggestions</a> (waiting → boycott ou alternatives ; suggestions page Donation)</p>
+  </div>
+</section>
+
+
+<section id="boycott" class="page hidden">
+
+<div class="search-bar">
+    <span class="icon">🔍</span>
+    <input type="search" id="searchInput" placeholder="Rechercher un produit…" oninput="applyFilters()">
+</div>
+
+
+
+<section class="filter">
+  <input type="radio" name="category" id="cat-all" checked>
+  <label for="cat-all">All</label>
+
+<input type="radio" name="category" id="cat-food">
+  <label for="cat-food">Food</label>
+
+<input type="radio" name="category" id="cat-tech">
+  <label for="cat-tech">Tech</label>
+
+<input type="radio" name="category" id="cat-clothing">
+  <label for="cat-clothing">Clothing</label>
+
+<input type="radio" name="category" id="cat-finance">
+  <label for="cat-finance">Finance</label>
+
+<input type="radio" name="category" id="cat-media">
+  <label for="cat-media">Media</label>
+
+<input type="radio" name="category" id="cat-cleaning">
+  <label for="cat-cleaning">Cosmetics</label>
+</section>
+
+
+
+
+
+<div  class="cards">
+ <div class="cards-container" id="cardsContainer">
+  
+    <div class="card" data-cat="food" data-name="cocacola">
+      <img src="/static/Coca-Cola_Logo.webp" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">Coca Cola</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">It runs factories in illegal Israeli settlements and uses grapes from stolen Palestinian/Syrian land—helping war crimes</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppcoca" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppcoca" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">Coca Cola</div>
+         <div class="description">It runs factories in illegal Israeli settlements and uses grapes from stolen Palestinian/Syrian land—helping war crimes. According to WhoProfits research, Coca-Cola Israel's exclusive franchise operates a distribution center in the illegal Atarot Settlement
+         Industrial Zone, while its Tabor Winery sources grapes from occupied West Bank and Syrian Golan vineyards. The ICJ ruled in July 2024 that Israel's 
+        occupation of Gaza, the West Bank (including East Jerusalem), and all settlements are illegal war crimes under international law, making Coke directly 
+        complicit through infrastructure support. Corporations enabling this unlawful occupation, apartheid, and related crimes—via military, logistical, financial,
+          or other aid—must be held accountable, with executives facing potential criminal liability.</div>
+      </div>
+    </div>
+
+
+
+  
+    <div class="card" data-cat="food" data-name="cheetos">
+      <img src="/static/cheetos.jfif" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">Cheetos</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">Cheetos are being boycotted primarily due to parent company PepsiCo's business ties to Israel</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppcheetos" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppcheetos" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">Cheetos</div>
+         <div class="description">Cheetos are being boycotted primarily due to parent company PepsiCo's business ties to Israel, which critics cite as complicity in the occupation of Palestinian territories. The brand is frequently included on boycott lists (such as BDS) along with other PepsiCo brands, due to investments in companies like SodaStream and Sabra</div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="clothing" data-name="adidas">
+      <img src="/static/adidas.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">Adidas</p>
+        <p class="text-cat">clothing</p>
+        <p class="text-body">Adidas has faced calls for boycotts primarily due to its commercial ties with Israel,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppadidas" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppadidas" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">Adidas</div>
+         <div class="description">Adidas has faced calls for boycotts primarily due to its commercial ties with Israel, accusations of complicity in the Israeli occupation of Palestinian territories, and specific, controversial marketing decisions.</div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="tech" data-name="apple">
+      <img src="/static/appla.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">Apple</p>
+        <p class="text-cat">Tech</p>
+        <p class="text-body">Acquired several Israeli companies and conducts limited R&D activities in Israel focusing on semiconductor technologies.</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppapple" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppapple" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">Apple</div>
+         <div class="description">Acquired several Israeli companies and conducts limited R&D activities in Israel focusing on semiconductor technologies. Apple matches worker donations to IDF and illegal settlements, employees allege although not confirmed.
+         </div>
+     </div>
+    </div>
+
+    
+    <div class="card" data-cat="media" data-name="bbc">
+      <img src="/static/bbc.jfif" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">BBC</p>
+        <p class="text-cat">Media</p>
+        <p class="text-body">The BBC is being boycotted by some groups and criticized by its own staff over allegations of pro-Israel bias in its coverage of the conflict in Gaza.</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppbbc" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppbbc" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">BBC</div>
+         <div class="description">The BBC is being boycotted by some groups and criticized by its own staff over allegations of pro-Israel bias in its coverage of the conflict in Gaza. Critics argue the network dehumanizes Palestinians through inequitable language, fails to report adequately on the humanitarian crisis, and gives disproportionate airtime to Israeli narratives.
+
+         </div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="cleaning" data-name="bioderma">
+      <img src="/static/bioderma.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">Bioderma</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">Bioderma is included in boycott lists because its parent company, Galderma, was formerly owned by Nestle and L'Oréal,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppbiod" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppbiod" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">Bioderma</div>
+         <div class="description">Bioderma is included in boycott lists because its parent company, Galderma, was formerly owned by Nestle and L'Oréal, and is now owned by an investment consortium (EQT and GIC) that has invested in Israeli technology. Such investments are seen by boycotters as helping strengthen the Israeli economy and occupation.
+
+         </div>
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="finance" data-name="blackrock">
+      <img src="/static/blackrock.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">blackrock</p>
+        <p class="text-cat">finance</p>
+        <p class="text-body">BlackRock is boycotted by pro-Palestine activists for being a major investor in weapons manufacturers—including Lockheed Martin</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppbr" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppbr" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">blackrock</div>
+         <div class="description">BlackRock is boycotted by pro-Palestine activists for being a major investor in weapons manufacturers—including Lockheed Martin, RTX, Northrop Grumman, Boeing, and General Dynamics—that supply the Israeli military. Activists argue these investments make the firm complicit in alleged war crimes and human rights violations against Palestinians.
+         </div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="media" data-name="cnn">
+      <img src="/static/cnn.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">CNN</p>
+        <p class="text-cat">media</p>
+        <p class="text-body">CNN is being boycotted by supporters of Palestine due to accusations of severe pro-Israel bias in its coverage of the Gaza conflict,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppcnn" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppcnn" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">CNN</div>
+         <div class="description">CNN is being boycotted by supporters of Palestine due to accusations of severe pro-Israel bias in its coverage of the Gaza conflict, including the suppression of Palestinian perspectives, airbrushing of Israeli actions, and spreading misinformation. Critics allege the network acts as a "surrogate censor" for Israel.</div>
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="cleaning" data-name="colgate">
+      <img src="/static/colgate.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">Colgate</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">Colgate is included in consumer boycott campaigns due to its business activities in Israel,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppcolg" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppcolg" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">Colgate</div>
+         <div class="description">Colgate is included in consumer boycott campaigns due to its business activities in Israel, with campaigners alleging the company is complicit in supporting Israel's actions against Palestinians. It is often listed by grassroots movements alongside other multinational brands for maintaining operations, investments, or partnerships linked to the Israeli market.</div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="tech" data-name="dell">
+      <img src="/static/dell.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">DELL</p>
+        <p class="text-cat">etch</p>
+        <p class="text-body">Dell is boycotted by pro-Palestinian activists, including the Boycott, Divestment, Sanctions (BDS) movement, due to its alleged complicity in Israel's</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppdell" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppdell" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">DELL</div>
+         <div class="description">Dell is boycotted by pro-Palestinian activists, including the Boycott, Divestment, Sanctions (BDS) movement, due to its alleged complicity in Israel's occupation and military actions in Gaza. Activists cite Dell’s supply of IT infrastructure to the Israeli military, research and development in illegal settlements, and financial backing from its leadership as reasons for targeting the company.
+         </div>
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="food" data-name="danone">
+      <img src="/static/danone.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">Danone</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">CDanone is targeted by boycott campaigns over alleged, though officially denied, ties to Israel and its investment in Israeli firms.</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppdano" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppdano" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">Danone</div>
+         <div class="description">Danone is targeted by boycott campaigns over alleged, though officially denied, ties to Israel and its investment in Israeli firms. The pressure, particularly strong in Indonesia and some Middle East regions, often stems from concerns over investment in Israeli-based food companies, prompting calls to support Palestinian independence.
+         </div>
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="media" data-name="disney">
+      <img src="/static/disney.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">Disney</p>
+        <p class="text-cat">media</p>
+        <p class="text-body">Disney is facing boycotts from pro-Palestinian supporters primarily due to the company's financial and public support for Israel </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppdisn" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppdisn" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">Disney</div>
+         <div class="description">Disney is facing boycotts from pro-Palestinian supporters primarily due to the company's financial and public support for Israel during the ongoing Gaza conflict, as well as perceived pro-Israel bias in its media content.</div>
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="food" data-name="doritos">
+      <img src="/static/doritos.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">Doritos</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">Doritos is boycotted in connection with Palestine primarily because it is owned by PepsiCo,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppdori" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppdori" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">Danone</div>
+         <div class="description">Doritos is boycotted in connection with Palestine primarily because it is owned by PepsiCo, which is targeted for its investments in Israel and its partnership with the Israeli-based Strauss Group. The boycott aims to pressure companies seen as supporting or profiting from the Israeli occupation. </div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="cleaning" data-name="dove">
+      <img src="/static/dove.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">Dove</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">Dove is boycotted because it is owned by Unilever, a conglomerate accused of being complicit in Israeli policies</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppdove" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppdove" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">Dove</div>
+         <div class="description">Dove is boycotted because it is owned by Unilever, a conglomerate accused of being complicit in Israeli policies, specifically by selling Ben & Jerry's Israeli distribution rights in 2022 to bypass the ice cream brand’s decision to halt sales in occupied Palestinian territories. 
+         </div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="food" data-name="fanta">
+      <img src="/static/fanta.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">fanta</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">Fanta is boycotted because it is owned by The Coca-Cola Company, which is targeted for operating a,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppfan" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppfan" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">fanta</div>
+         <div class="description">Fanta is boycotted because it is owned by The Coca-Cola Company, which is targeted for operating a, manufacturing plant in the Atarot industrial zone, an illegal Israeli settlement in occupied East Jerusalem. This involvement in occupied Palestinian territory has led to its inclusion in campaigns boycotting companies supporting Israeli settlement infrastructure.
+         </div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="cleaning" data-name="garnier">
+      <img src="/static/garnier.jfif" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">garnier</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">FGarnier is subject to boycotts, particularly linked to the BDS movement (Boycott, Divestment, Sanctions), primarily due to a 2014</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppgr" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppgr" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">garnier</div>
+         <div class="description">Garnier is subject to boycotts, particularly linked to the BDS movement (Boycott, Divestment, Sanctions), primarily due to a 2014 controversy where Garnier Israel donated toiletries to female Israeli Defense Forces (IDF) soldiers during the conflict in Gaza. Critics accused the company of supporting the military action
+           </div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="cleaning" data-name="gillette">
+      <img src="/static/gilette.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">gillette</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">Gillette is boycotted because its parent company, Procter & Gamble (P&G), has significant investments in Israel, including an R&D center in Tel Aviv and partn</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppgil" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppgil" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">gillette</div>
+         <div class="description">Gillette is boycotted because its parent company, Procter & Gamble (P&G), has significant investments in Israel, including an R&D center in Tel Aviv and partnerships with companies operating in occupied Palestinian territories. These ties lead to allegations of supporting the Israeli economy and occupation.
+         </div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="media" data-name="google">
+      <img src="/static/google.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">google</p>
+        <p class="text-cat">media</p>
+        <p class="text-body">Google is facing calls for a boycott and protests from activist groups, some employees, and human rights advocates, primaril</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppgo" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppgo" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">google</div>
+         <div class="description">Google is facing calls for a boycott and protests from activist groups, some employees, and human rights advocates, primarily due to its business dealings with the Israeli government and military, particularly during the conflict in Gaza. The core reasons for this campaign involve accusations of enabling surveillance, supporting apartheid, and retaliation against staff opposing these actions.
+
+         </div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="cleaning" data-name="h&s">
+      <img src="/static/headshoulders.jpg" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">head & shoulders</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">Head & Shoulders is boycotted by supporters of Palestine primarily because it is owned by Procter & Gamble (P&G)</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#pphs" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="pphs" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">head & shoulders</div>
+         <div class="description">Head & Shoulders is boycotted by supporters of Palestine primarily because it is owned by Procter & Gamble (P&G), a multinational consumer goods corporation targeted for its ties to Israel.</div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="tech" data-name="hp">
+      <img src="/static/hp.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">hp</p>
+        <p class="text-cat">tech</p>
+        <p class="text-body">HP is boycotted due to its extensive technological support for the Israeli military and government, which, according to the BDS Movement, </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#pphp" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="pphp" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">hp</div>
+         <div class="description">HP is boycotted due to its extensive technological support for the Israeli military and government, which, according to the BDS Movement, facilitates the occupation of Palestinian territories and the oppression of Palestinians. Key issues include providing servers for Israeli prisons and biometric identification systems used at military checkpoints.</div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="tech" data-name="ibm">
+      <img src="/static/ibm.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">ibm</p>
+        <p class="text-cat">tech</p>
+        <p class="text-body">IBM is targeted by the Boycott, Divestment, Sanctions (BDS) movement and human rights activists for its technological support of the Israeli military</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppibm" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppibm" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">ibm</div>
+         <div class="description">IBM is targeted by the Boycott, Divestment, Sanctions (BDS) movement and human rights activists for its technological support of the Israeli military and government, particularly concerning projects linked to surveillance and the occupation of Palestinian territories. Activists cite IBM's management of databases for the Israeli Population Authority, which assists in enforcing the occupation.
+         </div>
+
+      </div>
+    </div>
+
+    
+    
+    <div class="card" data-cat="tech" data-name="intel">
+      <img src="/static/intel.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">intel</p>
+        <p class="text-cat">tech</p>
+        <p class="text-body">Intel is boycotted by pro-Palestinian groups, including the BDS movement, due to its extensive investments in Israel, </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppint" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppint" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">intel</div>
+         <div class="description">Intel is boycotted by pro-Palestinian groups, including the BDS movement, due to its extensive investments in Israel, specifically a $25 billion factory expansion in Kiryat Gat, which is located on land associated with ethnically cleansed Palestinian villages. Activists argue that this investment, combined with long-standing R&D facilities, makes Intel complicit in Israel’s occupation, surveillance, and military actions.</div>
+
+      </div>
+    </div>
+
+
+    
+    
+    <div class="card" data-cat="finance" data-name="jpmorgan">
+      <img src="/static/jpmorgan.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">jp morgan</p>
+        <p class="text-cat">finance</p>
+        <p class="text-body">JPMorgan Chase is targeted by pro-Palestinian boycotts and protests primarily due to its financial ties to Israel,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppjp" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppjp" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">jp morgan</div>
+         <div class="description">JPMorgan Chase is targeted by pro-Palestinian boycotts and protests primarily due to its financial ties to Israel, including investments in Israeli weapons manufacturer Elbit Systems and underwriting "war bonds" for the state. Activists accuse the firm of profiting from the ongoing conflict in Gaza.</div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="food" data-name="lays">
+      <img src="/static/lays.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">lays</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">JLay's is boycotted due to its parent company, PepsiCo, having significant investments and operations in Israel,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#pplays" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="pplays" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">lays</div>
+         <div class="description">Lay's is boycotted due to its parent company, PepsiCo, having significant investments and operations in Israel, which activists argue supports the Israeli occupation of Palestinian territories. Key reasons include owning SodaStream, which operates in Israel, and holding a 50% stake in Sabra], a company involved in supporting Israeli economic interests.  
+         </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="cleaning" data-name="lrp">
+      <img src="/static/larochepossay.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">la roche possay</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">La Roche-Posay is boycotted because it is owned by L'Oréal, a company that has faced criticism for long-standing business ties, investment,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#pplrp" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="pplrp" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">la roche possay</div>
+         <div class="description">La Roche-Posay is boycotted because it is owned by L'Oréal, a company that has faced criticism for long-standing business ties, investment, and manufacturing operations within Israel. Critics argue that these ties support the Israeli economy, leading consumers to include it on lists of brands targeted for boycotts. 
+         </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="food" data-name="lipton">
+      <img src="/static/lipton.jfif" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">lipton</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">Lipton is being boycotted as part of international campaigns protesting companies perceived to be complicit in the Israeli occupation of Palestine</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#pplip" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="pplip" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">lipton</div>
+         <div class="description">Lipton is being boycotted as part of international campaigns protesting companies perceived to be complicit in the Israeli occupation of Palestine and the conflict in Gaza. The brand is often targeted due to its affiliation with parent company PepsiCo, which is accused of having investments or ties to Israel.</div>
+
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="cleaning" data-name="loreal">
+      <img src="/static/loreal.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">l'oreal</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">L'Oréal is boycotted by pro-Palestinian activists and organizations, including the Boycott, Divestment, and Sanctions (BDS) movement, primarily due </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#pplor" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="pplor" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">l'oreal</div>
+         <div class="description">L'Oréal is boycotted by pro-Palestinian activists and organizations, including the Boycott, Divestment, and Sanctions (BDS) movement, primarily due to its extensive business investments and operational ties with Israel. Activists argue that these activities support Israeli policies in the occupied Palestinian territories.</div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="cleaning" data-name="mac">
+      <img src="/static/mac.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">mac</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">MAC Cosmetics is boycotted by supporters of Palestine primarily due to its parent company, Estée Lauder, and the actions of its leadership </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppmac" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppamc" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">mac</div>
+         <div class="description">MAC Cosmetics is boycotted by supporters of Palestine primarily due to its parent company, Estée Lauder, and the actions of its leadership regarding Israel. Ronald Lauder, a key leader of the company, is associated with groups supporting Israeli settlements and has been described as having close ties to Israeli political causes.
+         </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="clothing" data-name="louisvitton">
+      <img src="/static/louisvitton.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">louis vitton</p>
+        <p class="text-cat">Clothing</p>
+        <p class="text-body">Louis Vuitton faces boycott calls due to alleged investments by its parent company, LVMH, in Israeli security and tech firms,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#pplv" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="pplv" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">louis vitton</div>
+         <div class="description">Louis Vuitton faces boycott calls due to alleged investments by its parent company, LVMH, in Israeli security and tech firms, alongside controversies over products perceived as either exploiting Palestinian solidarity or, conversely, supporting anti-Israel sentiment. Concerns include a $820 t-shirt with watermelon-colored branding and a 2021 keffiyeh-inspired scarf.
+         </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="food" data-name="mars">
+      <img src="/static/mars.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">mars</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">Mars, Incorporated is targeted for boycotts because it invests in Israeli foodtech startups via venture capital partners like JVC,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppma" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppma" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">mars</div>
+         <div class="description">Mars, Incorporated is targeted for boycotts because it invests in Israeli foodtech startups via venture capital partners like JVC, complicit with the Israeli occupation. These investments are seen as funding the economy behind the ongoing occupation. The boycott aims to pressure the company to cut ties with Israel. </div>
+
+      </div>
+    </div>
+    
+    <div class="card" data-cat="finance" data-name="mastercard">
+      <img src="/static/mastercard.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">mastercard</p>
+        <p class="text-cat">finance</p>
+        <p class="text-body">Mastercard is boycotted by supporters of Palestine due to its perceived support for Israel's economy and military operations,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppmc" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppmc" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">mastercard</div>
+         <div class="description">Mastercard is boycotted by supporters of Palestine due to its perceived support for Israel's economy and military operations, especially during the war in Gaza, making it a target for protesters seeking to cut financial ties with Israel. It is seen as a Western entity aiding in the facilitation of economic activities that underpin the Israeli occupation.</div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="media" data-name="meta">
+      <img src="/static/meta.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">meta</p>
+        <p class="text-cat">media</p>
+        <p class="text-body">Meta is being boycotted, particularly by users in Palestine and their supporters, due to persistent allegations of systematic censorship,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppme" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppme" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">media</div>
+         <div class="description">Microsoft is facing boycott calls, primarily spearheaded by the Boycott, Divestment, Sanctions (BDS) movement and activist groups,</div>
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="tech" data-name="microsoft">
+      <img src="/static/micro.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">microsoft</p>
+        <p class="text-cat">tech</p>
+        <p class="text-body">Microsoft is facing boycott calls, primarily spearheaded by the Boycott, Divestment, Sanctions (BDS) movement and activist groups,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppmi" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppmi" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">microsoft</div>
+         <div class="description">Microsoft is facing boycott calls, primarily spearheaded by the Boycott, Divestment, Sanctions (BDS) movement and activist groups, due to its deep, ongoing technological and financial partnerships with the Israeli military and government
+         </div>
+
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="media" data-name="netflix">
+      <img src="/static/netflix.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">netflix</p>
+        <p class="text-cat">media</p>
+        <p class="text-body">Netflix is facing calls for a boycott (notably by CodePink) primarily for removing a large collection of Palestinian films in October 2024, which critics label ,</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppnet" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppnet" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">netflix</div>
+         <div class="description">Netflix is facing calls for a boycott (notably by CodePink) primarily for removing a large collection of Palestinian films in October 2024, which critics label as the "erasure" of Palestinian stories. While Netflix cited the expiration of three-year licensing deals for the removal of about 19-32 films, many viewed this as an act of cultural censorship during the conflict</div>
+
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="food" data-name="Nestle">
+      <img src="/static/nestle.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">nestle</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">Nestlé is boycotted due to its investments in Israel, specifically owning a majority stake in Osem, an Israeli food manufacturer </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppnes" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppnes" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">nestle</div>
+         <div class="description">Nestlé is boycotted due to its investments in Israel, specifically owning a majority stake in Osem, an Israeli food manufacturer that operates factories in illegal occupied Palestinian territories. This investment, including over $10 million in local factories, is viewed as complicity in supporting the Israeli economy and occupation
+
+         </div>
+
+      </div>
+    </div>
+
+    
+    
+    <div class="card" data-cat="media" data-name="nyt">
+      <img src="/static/new york times.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">new york times</p>
+        <p class="text-cat">media</p>
+        <p class="text-body">he New York Times (NYT) is currently being boycotted by a coalition of writers, activists, and readers—including groups like "Writers Against the War on Gaza" </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppnyt" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppnyt" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">new york times</div>
+         <div class="description">The New York Times (NYT) is currently being boycotted by a coalition of writers, activists, and readers—including groups like "Writers Against the War on Gaza" (WAWOG)—due to allegations of severe, systemic pro-Israel bias in its coverage of the Israeli-Palestinian conflict, particularly regarding the war in Gaza
+         </div>
+
+      </div>
+    </div>
+
+    
+    
+    <div class="card" data-cat="clothing" data-name="Nike">
+      <img src="/static/nike.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">nike</p>
+        <p class="text-cat">clothing</p>
+        <p class="text-body">Nike faces boycotts and criticism from pro-Palestinian activists primarily over alleged complicity in the Israeli occupation of Palestine </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppnike" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppnike" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">nike</div>
+         <div class="description">Nike faces boycotts and criticism from pro-Palestinian activists primarily over alleged complicity in the Israeli occupation of Palestine. Key issues include Nike’s sourcing from firms with manufacturing operations in Israeli settlements (e.g., Delta Galil) and accusations of rejecting custom products featuring "Free Palestine" messaging
+         </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="cleaning" data-name="Nivea">
+      <img src="/static/nivea.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">nivea</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">Nivea is boycotted by pro-Palestinian activists because its parent company, Beiersdorf, is accused of providing financial support to Israel  </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppniv" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppniv" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">nivea</div>
+         <div class="description">Nivea is boycotted by pro-Palestinian activists because its parent company, Beiersdorf, is accused of providing financial support to Israel and operating within Israeli settlements. The BDS movement lists Beiersdorf as a target for allegedly facilitating Israel's occupation, and it was among German companies criticized for supporting Israel during recent conflicts</div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="tech" data-name="Nvidia">
+      <img src="/static/nvidia.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">nvidia</p>
+        <p class="text-cat">tech</p>
+        <p class="text-body">Nvidia is targeted by boycotts, particularly the BDS movement, due to its deep integration into Israel's tech-military sector, massive investments in Israeli AI infrastructure, </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppnvi" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppnvi" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">nvidia</div>
+         <div class="description">Nvidia is targeted by boycotts, particularly the BDS movement, due to its deep integration into Israel's tech-military sector, massive investments in Israeli AI infrastructure, and acquisition of firms providing technology used in the surveillance and targeting of Palestinians.
+
+         </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="food" data-name="oreo">
+      <img src="/static/oreo.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">oreo</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">Oreo is boycotted in connection with Palestine because its parent company, Mondelez International, is accused of investing in Israeli startups </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppor" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppor" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">oreo</div>
+         <div class="description">Oreo is boycotted in connection with Palestine because its parent company, Mondelez International, is accused of investing in Israeli startups and maintaining financial ties in Occupied Palestine. These investments, such as in Torr FoodTech, are seen by boycott campaigns as financial support for Israeli businesses
+         </div>
+
+      </div>
+    </div>
+
+    
+    
+    
+    <div class="card" data-cat="finance" data-name="paypal">
+      <img src="/static/payâl.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">paypal</p>
+        <p class="text-cat">finance</p>
+        <p class="text-body">PayPal is boycotted by activists and targeted by campaigns like #PayPal4Palestine because it denies service to Palestinians in the West Bank  </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#pppp" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="pppp" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">paypal</div>
+         <div class="description">PayPal is boycotted by activists and targeted by campaigns like #PayPal4Palestine because it denies service to Palestinians in the West Bank and Gaza while providing services to Israeli citizens, including those in illegal West Bank settlements. Critics label this as discrimination, arguing it stifles the Palestinian economy. </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="food" data-name="pepsi">
+      <img src="/static/pepsi.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">pepsi</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">Pepsi is being boycotted in the Middle East and globally due to its perceived ties to the United States and Israel during the Gaza conflict, </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppps" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppps" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">pepsi</div>
+         <div class="description">Pepsi is being boycotted in the Middle East and globally due to its perceived ties to the United States and Israel during the Gaza conflict, with consumers seeking to boycott Western brands that support Israel. The boycott is fueled by consumers in Muslim-majority countries targeting brands viewed as complicit in the war in Gaza, often linked to the US, a major ally of Israel
+
+         </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="food" data-name="president">
+      <img src="/static/president.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">president</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">President brand is boycotted, particularly in parts of the Middle East, due to its association with France, </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#pppr" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="pppr" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">president</div>
+         <div class="description">President brand is boycotted, particularly in parts of the Middle East, due to its association with France, a country perceived as supporting Israel during the conflict in Gaza. Consumers often target French or Western brands deemed complicit in, or supportive of, Israel's policies, as part of broader grassroots boycotts.
+         </div>
+
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="clothing" data-name="puma">
+      <img src="/static/puma.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">puma</p>
+        <p class="text-cat">clothing</p>
+        <p class="text-body">Puma was boycotted for being the main international sponsor of the Israel Football Association (IFA) </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#pppm" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="pppm" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">puma</div>
+         <div class="description">Puma was boycotted for being the main international sponsor of the Israel Football Association (IFA), which includes teams located in illegal Israeli settlements on occupied Palestinian land. Led by the BDS Movement, the campaign highlighted Puma's complicity in sustaining Israeli settlement expansion, which is considered a war crime under international law
+         </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="clothing" data-name="reebok">
+      <img src="/static/reebok.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">reebok</p>
+        <p class="text-cat">clothing</p>
+        <p class="text-body">Reebok is being boycotted because it signed a two-year sponsorship deal in 2025 with the Israel Football Association (IFA), </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppr" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppr" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">reebok</div>
+         <div class="description">Reebok is being boycotted because it signed a two-year sponsorship deal in 2025 with the Israel Football Association (IFA), which includes teams based in illegal Israeli settlements on occupied Palestinian land. Activists argue this makes Reebok complicit in Israel's occupation and human rights violations, prompting calls for a #BoycottReebok campaign.
+
+         </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="food" data-name="snickers">
+      <img src="/static/sickers.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">snickers</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">Snickers is boycotted in solidarity with Palestine because its parent company, Mars, Inc., is accused of investing in Israeli foodtech startups.  </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppss" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppss" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">snickers</div>
+         <div class="description">Snickers is boycotted in solidarity with Palestine because its parent company, Mars, Inc., is accused of investing in Israeli foodtech startups. The brand is frequently included on consumer boycott lists targeting corporations that allegedly support the Israeli government and its operations in occupied Palestinian territories</div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="cleaning" data-name="sephora">
+      <img src="/static/sephora.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">sephora</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">Sephora is currently facing boycott calls from both sides of the Israeli-Palestinian conflict, driven by investments of its parent company, LVMH, in Israeli technology  </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppsp" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppsp" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">sephora</div>
+         <div class="description">Sephora is currently facing boycott calls from both sides of the Israeli-Palestinian conflict, driven by investments of its parent company, LVMH, in Israeli technology and its association with pro-Palestinian brand founders. Specifically, activists cite that LVMH CEO Bernard Arnault invested in an Israeli cybersecurity firm, while others call for a boycott due to Sephora's alleged scrutinizing of brands that support Palestine, such as Huda Beaut
+           </div>
+
+      </div>
+    </div>
+
+    
+    
+    <div class="card" data-cat="cleaning" data-name="signal">
+      <img src="/static/signal.jfif" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">signal</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">Based on the provided search results, the boycott against Signal toothpaste is motivated by its ownership by Unilever  </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppsig" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppsig" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">signal</div>
+         <div class="description">Based on the provided search results, the boycott against Signal toothpaste is motivated by its ownership by Unilever, a multinational corporation with significant business, investment, and manufacturing operations within Israel./div>
+
+      </div>
+    </div>
+    </div>
+
+    
+    
+    <div class="card" data-cat="food" data-name="starbucks">
+      <img src="/static/starbucks.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">starbucks</p>
+        <p class="text-cat">food</p>
+        <p class="text-body">Starbucks is boycotted due to perceived support for Israel during the Gaza conflict, largely triggered by a 2023 lawsuit against its employee unio  </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppsb" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppsb" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">starbucks</div>
+         <div class="description">Starbucks is boycotted due to perceived support for Israel during the Gaza conflict, largely triggered by a 2023 lawsuit against its employee union, "Starbucks Workers United." Following the union's pro-Palestine tweet, Starbucks sued for trademark infringement, which boycotters interpreted as siding against Palestine and a union-busting tactic.</div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="cleaning" data-name="vasline">
+      <img src="/static/vasline.jfif" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">vasline</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">Vaseline is boycotted because it is owned by Unilever, a parent company with significant business operations in Israel.  </p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppvas" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppvas" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">vasline</div>
+         <div class="description">Vaseline is boycotted because it is owned by Unilever, a parent company with significant business operations in Israel. Activists argue that Unilever's presence and tax contributions in Israel indirectly support Israeli state policies and the economy, leading to calls for a boycott as part of broader solidarity efforts with Palestine
+         </div>
+
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="cleaning" data-name="veet">
+      <img src="/static/veet.jfif" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">veet</p>
+        <p class="text-cat">Cosmetics</p>
+        <p class="text-body">Veet is often included in boycott lists supporting Palestine due to its parent company, Reckitt Benckiser, being identified as having financial or operational ties to Israel</p>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      </div>
+      <a href="#ppve" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppve" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">veet</div>
+         <div class="description">Veet is often included in boycott lists supporting Palestine due to its parent company, Reckitt Benckiser, being identified as having financial or operational ties to Israel. As part of the BDS (Boycott, Divestment, Sanctions) movement goal to pressure Israel, consumers target international brands with ties to the Israeli economy, particularly in the personal care sector.
+         </div>
+
+      </div>
+    </div>
+
+    
+    <div class="card" data-cat="finance" data-name="visa">
+      <img src="/static/visa.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">visa</p>
+        <p class="text-cat">finance</p>
+        <p class="text-body">Visa restrictions or boycotts related to Palestine arise from two primary, distinct scenarios: U.S.</div>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      <a href="#ppvisa" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppvisa" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">visa</div>
+         <div class="description">Visa restrictions or boycotts related to Palestine arise from two primary, distinct scenarios: U.S. sanctions against officials and specific travel limitations imposed on residents. The U.S. has denied/revoked visas for Palestinian Authority (PA) and Palestine Liberation Organization (PLO) officials, accusing them of failing to uphold commitments to peace and undermining peace prospects. Separately, restrictions often involve Israel limiting access to the Occupied Territories or foreign travelers linked to the Boycott, Divestment, and Sanctions (BDS) movement.</div>
+
+      </div>
+    </div>
+
+
+    
+    <div class="card" data-cat="clothing" data-name="zara">
+      <img src="/static/zara.png" alt="Product image" class="card-image" />
+      <div class="card-details">
+        <p class="text-title">zara</p>
+        <p class="text-cat">clothing</p>
+        <p class="text-body">Zara faces boycott calls, particularly led by the BDS movement, due to its perceived complicity in Israel's actions in Palestine
+        </div>
+        <div class="card-alternative">✅ <a href="#" class="card-alternative-link">Try instead</a></div>
+      <a href="#ppzara" class="card-button">More info</a>
+    </div>
+
+    
+    <div id="ppzara" class="popup">
+      <div class="popup-content">
+        <a href="#" class="close-btn">&times;</a>
+        <div class="prodtitre">zara</div>
+         <div class="description">Zara faces boycott calls, particularly led by the BDS movement, due to its perceived complicity in Israel's actions in Palestine, highlighted by a 2023 marketing campaign with imagery resembling deceased Palestinians in Gaza and the 2025 opening of a major flagship store in Israel. Protesters accuse the brand of supporting Israeli policies.</div>
+
+      </div>
+    </div>
+
+
+
+    
+
+
+
+
+
+
+
+
+  </div>
+</div>
+  <p id="no-results" class="hidden" style="margin-top:2rem; color:#888; text-align:center;">No products found.</p>
+</section>
+
+
+<section id="alt" class="page hidden alt-page">
+  <div class="alt-layout">
+    <header class="alt-header">
+      <p class="alt-header__sprig" aria-hidden="true">🌿</p>
+      <p class="eyebrow">Curated directory</p>
+      <h2 class="section-title alt-header__title">Ethical Alternatives</h2>
+      <p class="alt-header__tagline">Every boycott is also a vote — here’s where to cast it.</p>
+      <p class="section-lead alt-header__lead">
+        Community-sourced brands and initiatives, validated by the Amenah team. 
+      </p>
+    </header>
+
+    <div class="panel-3d alt-panel">
+      <div class="alt-toolbar">
+        <div class="search-bar alt-search-bar">
+          <span class="icon" aria-hidden="true">🔍</span>
+          <input
+            type="search"
+            id="altSearchInput"
+            placeholder="Search by name or description…"
+            autocomplete="off"
+            aria-label="Search alternatives"
+          >
+        </div>
+
+        <section class="filter alt-filter" aria-label="Filter by category">
+          <input type="radio" name="altCategory" id="alt-cat-all" checked>
+          <label for="alt-cat-all">All</label>
+
+          <input type="radio" name="altCategory" id="alt-cat-food">
+          <label for="alt-cat-food">Food</label>
+
+          <input type="radio" name="altCategory" id="alt-cat-tech">
+          <label for="alt-cat-tech">Tech</label>
+
+          <input type="radio" name="altCategory" id="alt-cat-clothing">
+          <label for="alt-cat-clothing">Fashion</label>
+
+          <input type="radio" name="altCategory" id="alt-cat-finance">
+          <label for="alt-cat-finance">Finance</label>
+
+          <input type="radio" name="altCategory" id="alt-cat-media">
+          <label for="alt-cat-media">Media</label>
+
+          <input type="radio" name="altCategory" id="alt-cat-cleaning">
+          <label for="alt-cat-cleaning">Cosmetics / care</label>
+        </section>
+      </div>
+
+      <p class="alt-meta muted" id="altResultCount" aria-live="polite"></p>
+
+      <div id="produitsValides" class="alt-produits-stack" aria-live="polite"></div>
+
+      <p id="altNoResults" class="alt-no-results hidden" role="status">No results for this search or filter.</p>
+
+      <div class="alt-cta-row">
+        <p class="alt-cta-text muted">Know a credible alternative?</p>
+        <button type="button" class="btn-3d btn-3d--primary" onclick="showPage('add')">Suggest a product</button>
+        <a class="alt-admin-link" href="/admin">Team validation (admin)</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="news" class="page hidden">
+  <div class="news-page panel-3d">
+    <header class="news-page__header">
+      <h2 class="section-title news-page__title">Gaza &amp; région</h2>
+      <p class="section-lead news-page__lead">
+        Titres récents sur la Palestine, Gaza et le Proche-Orient (flux RSS&nbsp;: BBC Middle East, Al Jazeera — filtrés). Les liens ouvrent l’article sur le site d’origine.
+      </p>
+    </header>
+    <p id="gazaNewsStatus" class="news-page__status" role="status"></p>
+    <div id="gazaNewsFeed" class="news-feed" aria-live="polite"></div>
+    <p class="news-page__footnote muted">
+      Actualités fournies par des médias tiers ; Amenah n’est pas responsable du contenu éditorial. Mise en cache ~5&nbsp;min côté serveur.
+    </p>
+  </div>
+</section>
+
+
+<section id="donation" class="page hidden">
+  <div class="donation-page panel-3d">
+    <header class="donation-page__header">
+      <h2 class="section-title donation-page__title">Soutenir Gaza &amp; les Palestinien·ne·s</h2>
+      <p class="section-lead donation-page__lead">
+        Amenah ne collecte pas d’argent. Voici des <strong>organismes reconnus</strong> vers lesquels vous pouvez orienter un don — aide humanitaire, eau, nourriture, santé ou éducation selon leurs missions.
+      </p>
+    </header>
+
+    <ul id="donationGrid" class="donation-grid" role="list"></ul>
+
+    <p class="donation-page__note muted">
+      Les liens ouvrent le site officiel de chaque organisme. Vérifiez toujours l’URL et les conditions avant de donner. Amenah ne reçoit aucune commission et ne vérifie pas les opérations financières des tiers.
+    </p>
+
+    <div class="alt-cta-row donation-page__admin-cta">
+      <a class="alt-admin-link" href="/admin">Team validation (admin)</a>
+    </div>
+  </div>
+</section>
+
+
+<section id="about" class="page hidden">
+  <div class="panel-3d about-panel about-panel--editorial">
+    <article class="about-block">
+      <h2 class="about-heading">Why Boycott?</h2>
+      <p class="about-body">
+        Boycotts are one of the most powerful non-violent tools of resistance available to ordinary people. When you refuse to buy a product, you are withdrawing your consent — your money — from a system that uses it to fund oppression, occupation, and war crimes.
+      </p>
+      <p class="about-body">
+        The BDS (Boycott, Divestment, Sanctions) movement was launched in 2005 by over 170 Palestinian civil society organizations. It calls on people of conscience worldwide to apply economic pressure on Israel until it complies with international law: ending the occupation, granting full equality to Arab citizens, and respecting the right of return for Palestinian refugees.
+      </p>
+    </article>
+
+    <article class="about-block">
+      <h2 class="about-heading">Does it work?</h2>
+      <p class="about-body">
+        Yes. The anti-apartheid boycott of South Africa is the most well-known example — it directly contributed to the end of apartheid. In the Palestinian context, major brands have already felt the pressure: McDonald&apos;s Israel struggled publicly; Starbucks closed dozens of Middle Eastern franchises; SodaStream was forced to shut its West Bank factory after sustained campaigning.
+      </p>
+      <p class="about-body">
+        Every purchase is a vote. Every boycott is a statement. Together they create economic consequences that no amount of PR can ignore forever.
+      </p>
+    </article>
+
+    <article class="about-block">
+      <h2 class="about-heading">About Amenah</h2>
+      <p class="about-body">
+        Amenah — meaning &ldquo;trustworthy&rdquo; in Arabic — was created to give consumers clear, sourced, and honest information about the companies that profit from occupation and war. We believe in transparency, accountability, and the power of informed choice.
+      </p>
+      <p class="about-body">
+        This site is independent, non-commercial, and built by people who believe that &ldquo;your purchase is their voice.&rdquo;
+      </p>
+    </article>
+
+    <div class="about-stats" role="group" aria-label="Key figures">
+      <div class="about-stat">
+        <span class="about-stat__num">15+</span>
+        <span class="about-stat__label">Brands Listed</span>
+      </div>
+      <div class="about-stat">
+        <span class="about-stat__num">6</span>
+        <span class="about-stat__label">Categories</span>
+      </div>
+      <div class="about-stat">
+        <span class="about-stat__num">100%</span>
+        <span class="about-stat__label">Independent</span>
+      </div>
+      <div class="about-stat">
+        <span class="about-stat__num">0</span>
+        <span class="about-stat__label">Ads / Sponsors</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div id="qrScannerModal" class="qr-modal hidden" aria-hidden="true" role="dialog" aria-labelledby="qrModalTitle">
+  <div class="qr-modal__scrim" data-close-qr tabindex="-1" aria-hidden="true"></div>
+  <div class="qr-modal__panel">
+    <header class="qr-modal__head">
+      <span id="qrModalTitle" class="qr-modal__head-title">📷 Scanner un produit</span>
+      <button type="button" class="qr-modal__back" data-close-qr>← Retour</button>
+    </header>
+
+    <div id="qrViewScan" class="qr-modal__view">
+      <div class="qr-modal__video-wrap">
+        <video id="qrVideo" class="qr-modal__video" playsinline muted></video>
+        <canvas id="qrCanvas" class="visually-hidden" aria-hidden="true"></canvas>
+        <div id="qrCameraError" class="qr-modal__cam-error hidden">
+          <p class="qr-modal__cam-error-title">⚠️ Erreur caméra</p>
+          <p id="qrCameraErrorMsg" class="qr-modal__cam-error-msg"></p>
+          <button type="button" class="qr-modal__retry" id="qrRetryCamera">Réessayer</button>
+        </div>
+      </div>
+      <p class="qr-modal__hint">📍 Placez le code-barres du produit dans le cadre rouge</p>
+      <div id="qrScanStatus" class="qr-modal__status-line" role="status"></div>
+      <div class="qr-modal__actions">
+        <button type="button" class="qr-modal__btn qr-modal__btn--green" id="qrBtnRescan">🔄 Scanner un autre produit</button>
+        <button type="button" class="qr-modal__btn qr-modal__btn--orange" id="qrBtnManual">⌨️ Saisir le code-barres manuellement</button>
+      </div>
+    </div>
+
+    <div id="qrViewManual" class="qr-modal__view hidden">
+      <div class="qr-modal__manual-hero"></div>
+      <p class="qr-modal__status-line qr-modal__status-line--manual">⌨️ Mode saisie manuelle actif</p>
+      <div class="qr-modal__actions">
+        <button type="button" class="qr-modal__btn qr-modal__btn--green" id="qrBtnBackToScan">🔄 Scanner un autre produit</button>
+        <button type="button" class="qr-modal__btn qr-modal__btn--orange" id="qrBtnManualStay">⌨️ Saisir le code-barres manuellement</button>
+      </div>
+      <div class="qr-modal__manual-box">
+        <label class="visually-hidden" for="qrManualInput">Code-barres EAN-13 (12 ou 13 chiffres)</label>
+        <input type="text" id="qrManualInput" class="qr-modal__manual-input" inputmode="numeric" pattern="[0-9]*" maxlength="13" placeholder="12 ou 13 chiffres (ex. 544900021191 ou …1916)" autocomplete="off">
+        <button type="button" class="qr-modal__verify" id="qrBtnVerify">Vérifier</button>
+      </div>
+      <div id="qrManualResult" class="qr-modal__manual-result" role="status"></div>
+    </div>
+  </div>
+</div>
+
+<div id="donationAgencyModal" class="donation-agency-modal hidden" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="donationAgencyModalTitle">
+  <div class="donation-agency-modal__scrim" data-close-donation-modal tabindex="-1" aria-hidden="true"></div>
+  <div class="donation-agency-modal__panel">
+    <button type="button" class="donation-agency-modal__close" data-close-donation-modal aria-label="Fermer">&times;</button>
+    <div id="donationAgencyModalHeroWrap" class="donation-agency-modal__hero">
+      <img id="donationAgencyModalHero" src="" alt="" class="donation-agency-modal__hero-img" loading="lazy" decoding="async" />
+    </div>
+    <div class="donation-agency-modal__content">
+      <div class="donation-agency-modal__head">
+        <div id="donationAgencyModalLogoWrap" class="donation-agency-modal__logo-wrap hidden">
+          <img id="donationAgencyModalLogo" src="" alt="" class="donation-agency-modal__logo" loading="lazy" decoding="async" />
+        </div>
+        <h2 id="donationAgencyModalTitle" class="donation-agency-modal__title"></h2>
+      </div>
+      <div id="donationAgencyModalBody" class="donation-agency-modal__body"></div>
+      <div id="donationAgencyModalGallery" class="donation-agency-modal__gallery" hidden></div>
+      <p id="donationAgencyModalError" class="donation-agency-modal__err hidden" role="alert"></p>
+      <a id="donationAgencyModalCta" class="donation-agency-modal__cta" href="#" target="_blank" rel="noopener noreferrer">Faire un don</a>
+    </div>
+  </div>
+</div>
+
+<div id="donationSuggestModal" class="feedback-modal hidden" aria-hidden="true" role="dialog" aria-labelledby="donationSuggestModalTitle" aria-modal="true">
+  <div class="feedback-modal__scrim" data-close-donation-suggest tabindex="-1" aria-hidden="true"></div>
+  <div class="feedback-modal__panel feedback-modal__panel--donation-suggest">
+    <button type="button" class="feedback-modal__close" data-close-donation-suggest aria-label="Fermer">&times;</button>
+    <h2 id="donationSuggestModalTitle" class="feedback-modal__title">Suggérer un organisme</h2>
+    <p class="donation-suggest-modal__lead">Proposez une organisation, une initiative ou une personne à ajouter à la page Donation (lien utile, bref contexte).</p>
+    <form id="donationSuggestForm" class="feedback-modal__form donation-suggest-modal__form" novalidate>
+      <label class="donation-suggest-modal__label" for="donationSuggestNom">Nom <span class="req">*</span></label>
+      <input type="text" id="donationSuggestNom" name="nom" class="donation-suggest-modal__input" maxlength="500" required autocomplete="organization" placeholder="Ex. : nom de l’ONG, de la campagne…" />
+      <label class="donation-suggest-modal__label" for="donationSuggestDesc">Précisions</label>
+      <textarea id="donationSuggestDesc" name="description" class="feedback-modal__textarea donation-suggest-modal__textarea" rows="4" maxlength="4000" placeholder="Pourquoi l’ajouter, zone d’action, type d’aide…"></textarea>
+      <label class="donation-suggest-modal__label" for="donationSuggestLien">Lien (site ou page de don)</label>
+      <input type="url" id="donationSuggestLien" name="lien_source" class="donation-suggest-modal__input" maxlength="2000" placeholder="https://…" />
+      <label class="donation-suggest-modal__label" for="donationSuggestEmail">E-mail (optionnel)</label>
+      <input type="email" id="donationSuggestEmail" name="email_contact" class="donation-suggest-modal__input" maxlength="320" placeholder="Pour un éventuel retour" autocomplete="email" />
+      <p id="donationSuggestFormStatus" class="feedback-modal__status" role="status"></p>
+      <button type="submit" class="feedback-modal__submit">Envoyer la suggestion</button>
+    </form>
+  </div>
+</div>
+
+<div id="feedbackModal" class="feedback-modal hidden" aria-hidden="true" role="dialog" aria-labelledby="feedbackModalTitle">
+  <div class="feedback-modal__scrim" data-close-feedback tabindex="-1" aria-hidden="true"></div>
+  <div class="feedback-modal__panel">
+    <button type="button" class="feedback-modal__close" data-close-feedback aria-label="Fermer">&times;</button>
+    <h2 id="feedbackModalTitle" class="feedback-modal__title">Send Feedback</h2>
+    <form id="feedbackForm" class="feedback-modal__form" novalidate>
+      <label class="feedback-modal__label visually-hidden" for="feedbackMessage">Your message</label>
+      <textarea
+        id="feedbackMessage"
+        name="message"
+        class="feedback-modal__textarea"
+        rows="7"
+        maxlength="8000"
+        placeholder="Share your thoughts, suggest a product, or report an error..."
+        required
+      ></textarea>
+      <p id="feedbackFormStatus" class="feedback-modal__status" role="status"></p>
+      <button type="submit" class="feedback-modal__submit">Send ✓</button>
+    </form>
+  </div>
+</div>
+
+<button type="button"
+        id="chatbotLauncher"
+        class="chatbot-launcher"
+        aria-expanded="false"
+        aria-controls="chatbotPanel"
+        aria-label="Ouvrir l'assistant Amenah"
+        title="Assistant Amenah">
+  <svg class="chatbot-launcher__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path d="M21 12a8 8 0 0 1-11.8 7.03L3 21l2-5.2A8 8 0 1 1 21 12Z"/>
+    <circle cx="8.5" cy="12" r="0.9" fill="currentColor" stroke="none"/>
+    <circle cx="12" cy="12" r="0.9" fill="currentColor" stroke="none"/>
+    <circle cx="15.5" cy="12" r="0.9" fill="currentColor" stroke="none"/>
+  </svg>
+  <span id="chatbotDot" class="chatbot-launcher__dot" aria-hidden="true"></span>
+</button>
+
+<aside id="chatbotPanel"
+       class="chatbot-panel"
+       role="dialog"
+       aria-modal="false"
+       aria-hidden="true"
+       aria-labelledby="chatbotTitle">
+  <header class="chatbot-panel__head">
+    <div class="chatbot-panel__avatar" aria-hidden="true">A</div>
+    <div class="chatbot-panel__title-wrap">
+      <p id="chatbotTitle" class="chatbot-panel__title">Assistant Amenah</p>
+      <span class="chatbot-panel__status">En ligne</span>
+    </div>
+    <button type="button" id="chatbotClose" class="chatbot-panel__close" aria-label="Fermer l'assistant">&times;</button>
+  </header>
+
+  <div id="chatbotBody" class="chatbot-panel__body" role="log" aria-live="polite" aria-atomic="false"></div>
+
+  <form id="chatbotForm" class="chatbot-panel__form" autocomplete="off" novalidate>
+    <label class="visually-hidden" for="chatbotInput">Message</label>
+    <input type="text"
+           id="chatbotInput"
+           class="chatbot-panel__input"
+           placeholder="Écris ton message…"
+           maxlength="600"
+           autocomplete="off" />
+    <button type="submit" id="chatbotSend" class="chatbot-panel__send" aria-label="Envoyer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="M22 2 11 13"/>
+        <path d="M22 2l-7 20-4-9-9-4 20-7Z"/>
+      </svg>
+    </button>
+  </form>
+</aside>
+
+<script type="application/json" id="amenah-embedded-produit-alternatives">[]</script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<script src="static/main.js"></script>
+<script src="static/chatbot.js"></script>
+
+</body>
+</html>

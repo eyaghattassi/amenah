@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Validation des suggestions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/style.css">
+  <script>
+  (function () {
+    try {
+      var t = localStorage.getItem("amenah-theme");
+      if (t !== "light" && t !== "dark") t = "dark";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {
+      document.documentElement.setAttribute("data-theme", "dark");
+    }
+  })();
+  </script>
+</head>
+<body class="admin-body">
+  <div class="scene-root">
+    <div class="ambient-glow" aria-hidden="true"></div>
+    <header class="site-header admin-header-bar">
+      <a class="brand" href="/"><img class="brand-mark" src="static/logo.png" alt="" width="92" height="48" decoding="async"><span class="brand-text">Amenah</span></a>
+      <div class="admin-header-actions">
+        <button type="button" id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Thème clair ou sombre" aria-label="Changer le thème">
+          <span class="theme-toggle__sun" aria-hidden="true">☀️</span>
+          <span class="theme-toggle__moon" aria-hidden="true">🌙</span>
+        </button>
+        <h1 class="admin-title">Validation des suggestions</h1>
+        <div class="admin-user-bar" id="adminUserBar" aria-live="polite">
+          <span class="admin-user-chip" id="adminUserChip" hidden>
+            <span class="admin-user-chip__avatar" aria-hidden="true">👤</span>
+            <span class="admin-user-chip__meta">
+              <strong id="adminUserName">—</strong>
+              <span class="admin-user-chip__role" id="adminUserRole"></span>
+            </span>
+          </span>
+          <button type="button" id="logoutBtn" class="btn-3d btn-3d--ghost btn-3d--sm" hidden>Se déconnecter</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-main panel-3d">
+      <p class="section-lead">Chaque entrée provient de <strong>waiting</strong>. <strong>Accepter</strong> copie vers <strong>produits</strong> (boycott) ou <strong>produit_alternatives</strong> (alternative), puis retire l’entrée de <strong>waiting</strong>.</p>
+      <div id="waitingList" class="admin-list" aria-live="polite"></div>
+
+      <h2 class="admin-section-title">Suggestions page Donation</h2>
+      <p class="section-lead admin-section-lead">Table <strong>donation_suggestions</strong> (formulaire via le bouton <strong>+</strong> sur la page Donation). <strong>Accepter</strong> ajoute une carte dans <strong>donation_agencies</strong> (visible sur la page Donation). <strong>Refuser</strong> supprime la suggestion.</p>
+      <div id="donationSuggestList" class="admin-list" aria-live="polite"></div>
+
+      <p id="adminMsg" class="form-message" role="status"></p>
+
+      <section class="admin-team" id="adminTeamSection" hidden>
+        <h2 class="admin-section-title">Équipe Amenah</h2>
+        <p class="section-lead admin-section-lead">Les membres de l'équipe peuvent valider ou refuser les suggestions. Seul un <strong>admin</strong> peut créer ou supprimer un compte.</p>
+        <div id="teamList" class="admin-team-list" aria-live="polite"></div>
+
+        <form id="teamAddForm" class="admin-team-form" hidden autocomplete="off" novalidate>
+          <h3 class="admin-subtitle">Ajouter un membre</h3>
+          <div class="admin-team-form__row">
+            <label>
+              <span>Utilisateur</span>
+              <input id="newUsername" type="text" required minlength="3" placeholder="prenom.nom">
+            </label>
+            <label>
+              <span>Mot de passe</span>
+              <input id="newPassword" type="password" required minlength="6" placeholder="min. 6 caractères">
+            </label>
+            <label>
+              <span>Rôle</span>
+              <select id="newRole">
+                <option value="team" selected>Équipe</option>
+                <option value="admin">Admin</option>
+              </select>
+            </label>
+          </div>
+          <div class="admin-team-form__actions">
+            <button type="submit" class="btn-3d btn-3d--primary btn-3d--sm">Créer le compte</button>
+            <p id="teamMsg" class="form-message" role="status"></p>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+  <style>
+    .admin-user-bar {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .admin-user-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(140, 140, 160, 0.14);
+      border: 1px solid rgba(140, 140, 160, 0.22);
+      font-size: 0.88rem;
+    }
+    .admin-user-chip__avatar {
+      display: inline-flex;
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      background: rgba(120, 160, 255, 0.18);
+    }
+    .admin-user-chip__meta {
+      display: inline-flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .admin-user-chip__role {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      opacity: 0.7;
+    }
+    .btn-3d--sm {
+      padding: 0.4rem 0.85rem;
+      font-size: 0.82rem;
+    }
+    .admin-team { margin-top: 2.5rem; }
+    .admin-subtitle { margin: 0 0 0.7rem; font-size: 1rem; }
+    .admin-team-list {
+      display: grid;
+      gap: 0.55rem;
+      margin: 0.5rem 0 1.5rem;
+    }
+    .admin-team-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.9rem;
+      padding: 0.7rem 0.95rem;
+      border-radius: 12px;
+      background: rgba(140, 140, 160, 0.08);
+      border: 1px solid rgba(140, 140, 160, 0.18);
+      flex-wrap: wrap;
+    }
+    .admin-team-row__info {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      min-width: 0;
+    }
+    .admin-team-row__name { font-weight: 600; }
+    .admin-team-row__role {
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(120, 160, 255, 0.18);
+    }
+    .admin-team-row__role--admin { background: rgba(255, 160, 90, 0.22); }
+    .admin-team-row__meta { font-size: 0.78rem; opacity: 0.7; }
+    .admin-team-form {
+      padding: 1rem 1.1rem;
+      border-radius: 14px;
+      background: rgba(140, 140, 160, 0.06);
+      border: 1px solid rgba(140, 140, 160, 0.18);
+    }
+    .admin-team-form__row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .admin-team-form__row label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.82rem;
+    }
+    .admin-team-form__row label > span {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      opacity: 0.75;
+    }
+    .admin-team-form__row input,
+    .admin-team-form__row select {
+      padding: 0.55rem 0.7rem;
+      border-radius: 10px;
+      border: 1px solid rgba(140, 140, 160, 0.28);
+      background: rgba(255, 255, 255, 0.04);
+      color: inherit;
+      font: inherit;
+    }
+    .admin-team-form__actions {
+      display: flex;
+      gap: 0.9rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .admin-team-row__remove {
+      background: transparent;
+      border: 1px solid rgba(255, 100, 100, 0.4);
+      color: inherit;
+      padding: 0.3rem 0.7rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .admin-team-row__remove:hover { background: rgba(255, 100, 100, 0.12); }
+  </style>
+  <script>
+    const listEl = document.getElementById('waitingList');
+    const donationListEl = document.getElementById('donationSuggestList');
+    const msgEl = document.getElementById('adminMsg');
+
+    const userChipEl = document.getElementById('adminUserChip');
+    const userNameEl = document.getElementById('adminUserName');
+    const userRoleEl = document.getElementById('adminUserRole');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const teamSectionEl = document.getElementById('adminTeamSection');
+    const teamListEl = document.getElementById('teamList');
+    const teamFormEl = document.getElementById('teamAddForm');
+    const teamMsgEl = document.getElementById('teamMsg');
+
+    let currentUser = null;
+
+    function redirectToLogin() {
+      const nxt = encodeURIComponent(location.pathname + location.search);
+      location.replace('/admin/login?next=' + nxt);
+    }
+
+    async function apiFetch(url, opts) {
+      const res = await fetch(url, Object.assign({ credentials: 'same-origin' }, opts || {}));
+      if (res.status === 401) {
+        redirectToLogin();
+        throw new Error('unauthorized');
+      }
+      return res;
+    }
+
+    async function loadCurrentUser() {
+      try {
+        const res = await fetch('/api/admin/me', { credentials: 'same-origin' });
+        if (res.status === 401) { redirectToLogin(); return; }
+        const data = await res.json();
+        if (!data.ok || !data.user) { redirectToLogin(); return; }
+        currentUser = data.user;
+        userNameEl.textContent = currentUser.username;
+        userRoleEl.textContent = currentUser.role === 'admin' ? 'Administrateur' : 'Équipe';
+        userChipEl.hidden = false;
+        logoutBtn.hidden = false;
+        teamSectionEl.hidden = false;
+        if (currentUser.role === 'admin') {
+          teamFormEl.hidden = false;
+        }
+      } catch (e) {
+        redirectToLogin();
+      }
+    }
+
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' });
+      } catch (e) {}
+      location.href = '/admin/login';
+    });
+
+    async function loadWaiting() {
+      listEl.innerHTML = '<p class="muted">Chargement…</p>';
+      try {
+        const res = await apiFetch('/api/waiting');
+        const data = await res.json();
+        const items = data.items || [];
+        if (items.length === 0) {
+          listEl.innerHTML = '<p class="muted">Aucune suggestion en attente.</p>';
+          return;
+        }
+        listEl.innerHTML = '';
+        items.forEach((row) => {
+          const kind = (row.suggestion_type || 'boycott').toLowerCase();
+          const isAlt = kind === 'alternative';
+          const badgeClass = isAlt ? 'admin-badge admin-badge--alt' : 'admin-badge admin-badge--boycott';
+          const badgeLabel = isAlt ? 'Alternative' : 'Boycott';
+          const acceptLabel = isAlt ? 'Accepter → alternatives' : 'Accepter → boycott (produits)';
+          const article = document.createElement('article');
+          article.className = 'admin-item';
+          article.innerHTML = `
+            <div class="admin-item-head">
+              <strong>${escape(row.nom)}</strong>
+              <div class="admin-item-tags">
+                <span class="${badgeClass}">${escape(badgeLabel)}</span>
+                <span class="produit-cat">${escape(row.categorie || '—')}</span>
+              </div>
+            </div>
+            <p class="admin-desc">${escape(row.description || '')}</p>
+            ${row.lien_source ? `<p><a href="${attr(row.lien_source)}" target="_blank" rel="noopener">${escape(row.lien_source)}</a></p>` : ''}
+            ${row.email_contact ? `<p class="muted small">Contact : ${escape(row.email_contact)}</p>` : ''}
+            <p class="muted small">${escape(row.created_at || '')}</p>
+            <div class="admin-actions">
+              <button type="button" class="btn-3d btn-3d--primary" data-id="${row.id}" data-act="accept">${escape(acceptLabel)}</button>
+              <button type="button" class="btn-3d btn-3d--ghost" data-id="${row.id}" data-act="reject">Refuser</button>
+            </div>
+          `;
+          listEl.appendChild(article);
+        });
+
+        listEl.querySelectorAll('button[data-act]').forEach((btn) => {
+          btn.addEventListener('click', () => onAction(btn.dataset.id, btn.dataset.act));
+        });
+      } catch (e) {
+        listEl.innerHTML = '<p class="form-message form-message--err">Serveur injoignable.</p>';
+      }
+    }
+
+    async function loadDonationSuggestions() {
+      if (!donationListEl) return;
+      donationListEl.innerHTML = '<p class="muted">Chargement…</p>';
+      try {
+        const res = await apiFetch('/api/donation-suggestions');
+        const data = await res.json();
+        if (!data.ok) {
+          donationListEl.innerHTML =
+            '<p class="form-message form-message--err">' +
+            escape(data.error || 'Liste indisponible.') +
+            '</p>';
+          return;
+        }
+        const items = data.items || [];
+        const pending = items.filter((r) => (r.statut || 'en_attente') === 'en_attente');
+        donationListEl.innerHTML = '';
+
+        if (pending.length === 0) {
+          donationListEl.innerHTML = '<p class="muted">Aucune suggestion donation en attente.</p>';
+        } else {
+          pending.forEach((row) => {
+            const article = document.createElement('article');
+            article.className = 'admin-item';
+            article.innerHTML = `
+              <div class="admin-item-head">
+                <strong>${escape(row.nom)}</strong>
+                <div class="admin-item-tags">
+                  <span class="admin-badge admin-badge--donation">Donation</span>
+                  <span class="produit-cat">en attente</span>
+                </div>
+              </div>
+              <p class="admin-desc">${escape(row.description || '')}</p>
+              ${row.lien_source ? `<p><a href="${attr(row.lien_source)}" target="_blank" rel="noopener">${escape(row.lien_source)}</a></p>` : ''}
+              ${row.email_contact ? `<p class="muted small">Contact : ${escape(row.email_contact)}</p>` : ''}
+              <p class="muted small">${escape(row.created_at || '')}</p>
+              <div class="admin-actions">
+                <button type="button" class="btn-3d btn-3d--primary" data-did="${row.id}" data-dact="d-accept">Accepter → page Donation</button>
+                <button type="button" class="btn-3d btn-3d--ghost" data-did="${row.id}" data-dact="d-reject">Refuser</button>
+              </div>
+            `;
+            donationListEl.appendChild(article);
+          });
+          donationListEl.querySelectorAll('button[data-dact]').forEach((btn) => {
+            btn.addEventListener('click', () => onDonationAction(btn.dataset.did, btn.dataset.dact));
+          });
+        }
+      } catch (e) {
+        donationListEl.innerHTML = '<p class="form-message form-message--err">Serveur injoignable.</p>';
+      }
+    }
+
+    function escape(s) {
+      const d = document.createElement('div');
+      d.textContent = s == null ? '' : s;
+      return d.innerHTML;
+    }
+    function attr(s) {
+      return String(s).replace(/"/g, '&quot;');
+    }
+
+    async function onAction(id, act) {
+      msgEl.textContent = '';
+      const path = act === 'accept' ? `/api/waiting/${id}/accepter` : `/api/waiting/${id}/refuser`;
+      try {
+        const res = await apiFetch(path, { method: 'POST' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          msgEl.textContent = data.error || 'Erreur';
+          msgEl.className = 'form-message form-message--err';
+          return;
+        }
+        msgEl.textContent = act === 'accept' ? 'Entrée validée et copiée dans la bonne liste.' : 'Suggestion retirée.';
+        msgEl.className = 'form-message form-message--ok';
+        loadWaiting();
+      } catch (e) {
+        msgEl.textContent = 'Erreur réseau.';
+        msgEl.className = 'form-message form-message--err';
+      }
+    }
+
+    async function onDonationAction(id, dact) {
+      msgEl.textContent = '';
+      const path =
+        dact === 'd-accept'
+          ? `/api/donation-suggestions/${id}/accepter`
+          : `/api/donation-suggestions/${id}/refuser`;
+      try {
+        const res = await apiFetch(path, { method: 'POST' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          msgEl.textContent = data.error || 'Erreur';
+          msgEl.className = 'form-message form-message--err';
+          return;
+        }
+        msgEl.textContent =
+          dact === 'd-accept'
+            ? `Organisme ajouté à la page Donation${data.slug ? ' (slug : ' + data.slug + ')' : ''}.`
+            : 'Suggestion donation supprimée.';
+        msgEl.className = 'form-message form-message--ok';
+        loadDonationSuggestions();
+      } catch (e) {
+        msgEl.textContent = 'Erreur réseau.';
+        msgEl.className = 'form-message form-message--err';
+      }
+    }
+
+    function toggleTheme() {
+      var cur = document.documentElement.getAttribute("data-theme") || "dark";
+      var next = cur === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("amenah-theme", next);
+      } catch (e) {}
+      var btn = document.getElementById("themeToggle");
+      if (btn) {
+        btn.setAttribute(
+          "aria-label",
+          next === "dark" ? "Activer le thème clair" : "Activer le thème sombre"
+        );
+        btn.setAttribute(
+          "title",
+          next === "dark" ? "Passer en thème clair" : "Passer en thème sombre"
+        );
+      }
+    }
+    (function syncAdminThemeBtn() {
+      var cur = document.documentElement.getAttribute("data-theme") || "dark";
+      var btn = document.getElementById("themeToggle");
+      if (btn) {
+        btn.setAttribute(
+          "aria-label",
+          cur === "dark" ? "Activer le thème clair" : "Activer le thème sombre"
+        );
+        btn.setAttribute(
+          "title",
+          cur === "dark" ? "Passer en thème clair" : "Passer en thème sombre"
+        );
+      }
+    })();
+
+    async function loadTeam() {
+      if (teamSectionEl.hidden) return;
+      teamListEl.innerHTML = '<p class="muted">Chargement…</p>';
+      try {
+        const res = await apiFetch('/api/admin/users');
+        const data = await res.json();
+        const items = data.items || [];
+        const currentId = data.current_id;
+        if (!items.length) {
+          teamListEl.innerHTML = '<p class="muted">Aucun membre enregistré.</p>';
+          return;
+        }
+        teamListEl.innerHTML = '';
+        const canManage = currentUser && currentUser.role === 'admin';
+        items.forEach((u) => {
+          const row = document.createElement('div');
+          row.className = 'admin-team-row';
+          const roleClass = (u.role === 'admin') ? 'admin-team-row__role admin-team-row__role--admin' : 'admin-team-row__role';
+          const roleLabel = u.role === 'admin' ? 'Admin' : 'Équipe';
+          const isSelf = u.id === currentId;
+          row.innerHTML = `
+            <div class="admin-team-row__info">
+              <span class="admin-team-row__name">${escape(u.username)}${isSelf ? ' <span class="muted">(vous)</span>' : ''}</span>
+              <span class="${roleClass}">${escape(roleLabel)}</span>
+              <span class="admin-team-row__meta">${escape(u.created_at || '')}</span>
+            </div>
+            <div>
+              ${canManage && !isSelf ? `<button type="button" class="admin-team-row__remove" data-uid="${u.id}">Supprimer</button>` : ''}
+            </div>
+          `;
+          teamListEl.appendChild(row);
+        });
+        teamListEl.querySelectorAll('button[data-uid]').forEach((btn) => {
+          btn.addEventListener('click', () => deleteTeamMember(parseInt(btn.dataset.uid, 10), btn));
+        });
+      } catch (e) {
+        if (e && e.message === 'unauthorized') return;
+        teamListEl.innerHTML = '<p class="form-message form-message--err">Liste indisponible.</p>';
+      }
+    }
+
+    async function deleteTeamMember(userId, btn) {
+      if (!confirm('Supprimer ce membre de l\'équipe ?')) return;
+      if (btn) btn.disabled = true;
+      try {
+        const res = await apiFetch('/api/admin/users/' + userId, { method: 'DELETE' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          teamMsgEl.textContent = data.error || 'Suppression impossible.';
+          teamMsgEl.className = 'form-message form-message--err';
+          return;
+        }
+        teamMsgEl.textContent = 'Membre supprimé.';
+        teamMsgEl.className = 'form-message form-message--ok';
+        loadTeam();
+      } catch (e) {
+        if (e && e.message === 'unauthorized') return;
+        teamMsgEl.textContent = 'Erreur réseau.';
+        teamMsgEl.className = 'form-message form-message--err';
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    if (teamFormEl) {
+      teamFormEl.addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        teamMsgEl.textContent = '';
+        const username = document.getElementById('newUsername').value.trim().toLowerCase();
+        const password = document.getElementById('newPassword').value;
+        const role = document.getElementById('newRole').value;
+        if (!username || password.length < 6) {
+          teamMsgEl.textContent = 'Utilisateur requis et mot de passe de 6+ caractères.';
+          teamMsgEl.className = 'form-message form-message--err';
+          return;
+        }
+        const btn = teamFormEl.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        try {
+          const res = await apiFetch('/api/admin/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password, role }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.ok) {
+            teamMsgEl.textContent = data.error || 'Création impossible.';
+            teamMsgEl.className = 'form-message form-message--err';
+            return;
+          }
+          teamMsgEl.textContent = 'Compte créé : ' + data.username + ' (' + data.role + ').';
+          teamMsgEl.className = 'form-message form-message--ok';
+          teamFormEl.reset();
+          loadTeam();
+        } catch (e) {
+          if (e && e.message === 'unauthorized') return;
+          teamMsgEl.textContent = 'Erreur réseau.';
+          teamMsgEl.className = 'form-message form-message--err';
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    }
+
+    (async function boot() {
+      await loadCurrentUser();
+      if (!currentUser) return;
+      loadWaiting();
+      loadDonationSuggestions();
+      loadTeam();
+    })();
+  </script>
+</body>
+</html>

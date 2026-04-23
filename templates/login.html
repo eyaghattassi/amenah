@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connexion — Espace équipe Amenah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <script>
+  (function () {
+    try {
+      var t = localStorage.getItem("amenah-theme");
+      if (t !== "light" && t !== "dark") t = "dark";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {
+      document.documentElement.setAttribute("data-theme", "dark");
+    }
+  })();
+  </script>
+  <style>
+    .login-wrap {
+      min-height: calc(100vh - 120px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 2.25rem 2rem;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+    .login-card h1 {
+      margin: 0;
+      font-size: 1.6rem;
+      letter-spacing: -0.01em;
+    }
+    .login-card .login-sub {
+      margin: 0;
+      color: var(--muted, #888);
+      font-size: 0.95rem;
+    }
+    .login-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .login-field label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--muted, #888);
+    }
+    .login-field input {
+      padding: 0.7rem 0.85rem;
+      border-radius: 10px;
+      border: 1px solid rgba(140, 140, 160, 0.28);
+      background: rgba(255, 255, 255, 0.04);
+      color: inherit;
+      font: inherit;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .login-field input:focus {
+      border-color: rgba(120, 160, 255, 0.6);
+      box-shadow: 0 0 0 3px rgba(120, 160, 255, 0.18);
+    }
+    .login-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.25rem;
+    }
+    .login-actions .btn-3d {
+      width: 100%;
+      justify-content: center;
+    }
+    .login-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--muted, #888);
+    }
+    .login-footer a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  </style>
+</head>
+<body class="admin-body">
+  <div class="scene-root">
+    <div class="ambient-glow" aria-hidden="true"></div>
+    <header class="site-header admin-header-bar">
+      <a class="brand" href="/"><img class="brand-mark" src="/static/logo.png" alt="" width="92" height="48" decoding="async"><span class="brand-text">Amenah</span></a>
+      <div class="admin-header-actions">
+        <button type="button" id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Thème clair ou sombre" aria-label="Changer le thème">
+          <span class="theme-toggle__sun" aria-hidden="true">☀️</span>
+          <span class="theme-toggle__moon" aria-hidden="true">🌙</span>
+        </button>
+        <h1 class="admin-title">Espace équipe</h1>
+      </div>
+    </header>
+
+    <main class="login-wrap">
+      <form id="loginForm" class="login-card panel-3d" autocomplete="on" novalidate>
+        <div>
+          <h1>Connexion</h1>
+          <p class="login-sub">Accès réservé à l'équipe Amenah pour modérer les suggestions.</p>
+        </div>
+
+        <div class="login-field">
+          <label for="username">Utilisateur</label>
+          <input id="username" name="username" type="text" autocomplete="username" required autofocus>
+        </div>
+
+        <div class="login-field">
+          <label for="password">Mot de passe</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+
+        <p id="loginMsg" class="form-message" role="status" aria-live="polite"></p>
+
+        <div class="login-actions">
+          <button type="submit" class="btn-3d btn-3d--primary">Se connecter</button>
+          <a class="login-footer" href="/"><span>← Retour au site</span></a>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      var cur = document.documentElement.getAttribute("data-theme") || "dark";
+      var next = cur === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try { localStorage.setItem("amenah-theme", next); } catch (e) {}
+    }
+
+    function getNext() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var nxt = params.get('next') || '/admin';
+        if (!nxt.startsWith('/')) return '/admin';
+        return nxt;
+      } catch (e) {
+        return '/admin';
+      }
+    }
+
+    const form = document.getElementById('loginForm');
+    const msg = document.getElementById('loginMsg');
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      msg.className = 'form-message';
+      msg.textContent = '';
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      if (!username || !password) {
+        msg.textContent = 'Merci de remplir les deux champs.';
+        msg.className = 'form-message form-message--err';
+        return;
+      }
+      const btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Connexion…';
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ username, password }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          msg.textContent = data.error || 'Connexion impossible.';
+          msg.className = 'form-message form-message--err';
+          return;
+        }
+        msg.textContent = 'Bienvenue, ' + (data.user && data.user.username ? data.user.username : 'équipe') + ' !';
+        msg.className = 'form-message form-message--ok';
+        setTimeout(() => { window.location.href = getNext(); }, 250);
+      } catch (e) {
+        msg.textContent = 'Serveur injoignable.';
+        msg.className = 'form-message form-message--err';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Se connecter';
+      }
+    });
+  </script>
+</body>
+</html>
