@@ -21,6 +21,13 @@ from concurrent.futures import ThreadPoolExecutor
 from email.message import EmailMessage
 from functools import wraps
 from flask import Flask, jsonify, make_response, request, render_template, g, redirect, session
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env'))
+except ImportError:
+    pass
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE = os.path.join(BASE_DIR, 'data', 'amenah.db')
 SCHEMA_FILE = os.path.join(BASE_DIR, 'sql', 'schema.sql')
